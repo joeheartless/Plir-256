@@ -1,5 +1,5 @@
 # Plir-256
-Secure Plir 256 is a custom hashing algorithm that leverages bit rotation, modular mix, and deterministic message expansion to generate strong hashes with multiple stage processing.
+Plir 256 is a custom hashing algorithm that leverages bit rotation, modular mix, and deterministic message expansion to generate strong hashes with multiple stage processing.
 
 ## Key Features
 - **Dynamic Bit Rotation**: Utilizes bitwise shift & rotate to enhance diffusion.
@@ -10,7 +10,7 @@ Secure Plir 256 is a custom hashing algorithm that leverages bit rotation, modul
 
 ## Usage
 ```bash
-python secure_plir_256.py
+python plir_256.py
 ```
 Enter the text you want to hash, and the hash result will be displayed.
 
