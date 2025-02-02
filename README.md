@@ -4,7 +4,6 @@ Plir 256 is a custom hashing algorithm that leverages bit rotation, modular mix,
 ## Key Features
 - **Dynamic Bit Rotation**: Utilizes bitwise shift & rotate to enhance diffusion.
 - **Modular Mixing**: Combines modular arithmetic & shifting to improve collision resistance.
-- **Multi-Stage Hashing**: Hashing is performed in multiple stages to increase security.
 - **Deterministic Message Expansion**: Breaks input into smaller blocks to ensure better information distribution.
 - **Constant-Time Comparison**: Uses `hmac.compare_digest()` to prevent timing attacks.
 
