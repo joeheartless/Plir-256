@@ -24,7 +24,7 @@ def expand_message_deterministic(text):
         blocks.append(block)
     return blocks
 
-def secure_plir_256(text, rounds=128, stages=2): 
+def secure_plir_256(text, rounds=64, stages=1): 
     GOLDEN_RATIO_CONST = 0x9E3779B9
 
     def single_stage_hash(input_text, prev_state=0):
