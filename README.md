@@ -23,7 +23,7 @@ Enter the text you want to hash, and the hash result will be displayed.
 ## Example Output
 ```bash
 Enter text to hash: hello
-PLIR-256 Hash: 289539e17503f92aec27f040a1ce4d3f5842eae45a6612b63a66435b49023a49
+PLIR-256 Hash: 4cbb43eef2c600196355285b4029664135704367acb77177d5b1058a49aff63f
 ```
 ## Benchmarks
 - **Bit Distribution**
