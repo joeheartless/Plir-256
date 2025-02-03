@@ -26,7 +26,7 @@ Enter text to hash: hello
 PLIR-256 Hash: 289539e17503f92aec27f040a1ce4d3f5842eae45a6612b63a66435b49023a49
 ```
 ## Benchmarks
-- **Bit Distribution
-- **NIST STS
-- **Hash Time
-- **Avalanche Effect & Collision Test
+- **Bit Distribution**
+- **NIST STS**
+- **Hash Time**
+- **Avalanche Effect & Collision Test**
