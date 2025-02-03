@@ -17,7 +17,7 @@ Enter the text you want to hash, and the hash result will be displayed.
 - `rotate_left(x, n)`: Bitwise left rotation function.
 - `modular_mix(x, y)`: Modular mixing operation to spread entropy.
 - `expand_message_deterministic(text)`: Converts input text into numeric blocks.
-- `secure_plir_256(text, rounds=128, stages=2)`: Main hashing function with multiple processing stages.
+- `secure_plir_256(text, rounds=8, stages=1)`: Main hashing function with multiple processing stages.
 - `constant_time_compare(val1, val2)`: String comparison function safe from timing attacks.
 
 ## 🔥 Example Output
