@@ -12,7 +12,7 @@ def rotate_left(x, n, bits=32):
     return ((x << n) & (2**bits - 1)) | (x >> (bits - n))
 
 def modular_mix(x, y):
-    return ((x * 31) + (y * 17) + rotate_left(x, 7) + rotate_left(y, 11)) % (2**32)
+    return ((x * 33) ^ (y * 19) + rotate_left(x, 11) + rotate_left(y, 15) + (x >> 3) ^ (y << 2)) % (2**32)
 
 def expand_message_deterministic(text):
     blocks = []
@@ -39,8 +39,9 @@ def secure_plir_256(text, rounds=8, stages=1):
             key = GOLDEN_RATIO_CONST ^ (i * 73) ^ (h[i % 8] << (i % 6)) ^ (h[(i+3) % 8] >> (i % 4)) ^ (h[(i+5) % 8] << (i % 8))
             
             for j in range(0, len(h), 2):
-                h[j] = modular_mix(h[j], key) ^ (message[j % message_length] + GOLDEN_RATIO_CONST) & 0xFFFFFFFF
-                h[j+1] = modular_mix(h[j+1], rotate_left(h[j], 13)) ^ (h[(j+3) % 8] >> 5) ^ (h[(j+6) % 8] << 3) ^ rotate_left(h[(j+7) % 8], 17)
+                prev_xor = h[(j+1) % 8] ^ h[(j+3) % 8] 
+                h[j] = (modular_mix(h[j], key) ^ (message[j % message_length] + GOLDEN_RATIO_CONST) ^ prev_xor) & 0xFFFFFFFF
+                h[j+1] = (modular_mix(h[j+1], rotate_left(h[j], 13)) ^ (h[(j+3) % 8] >> 5) ^ (h[(j+6) % 8] << 3) ^ rotate_left(h[(j+7) % 8], 17) ^ prev_xor) & 0xFFFFFFFF
         
         return "".join(f"{x:08x}" for x in h[:8])
     
@@ -48,6 +49,7 @@ def secure_plir_256(text, rounds=8, stages=1):
     state = 0
     for _ in range(stages):
         hashed_output = single_stage_hash(hashed_output, state)
+        state ^= int(hashed_output[:8], 16)  # Update state dengan bagian awal hash
     hashed_output = hashed_output[:64]
     return hashed_output
     
