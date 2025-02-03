@@ -55,6 +55,6 @@ def constant_time_compare(val1, val2):
     return hmac.compare_digest(val1, val2)
 
 if __name__ == "__main__":
-    user_input = input("Masukkan teks untuk di-hash: ")
+    user_input = input("Enter text to hash: ")
     hash_result = secure_plir_256(user_input)
     print("PLIR-256 Hash:", hash_result)
