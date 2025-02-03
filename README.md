@@ -20,8 +20,13 @@ Enter the text you want to hash, and the hash result will be displayed.
 - `secure_plir_256(text, rounds=8, stages=1)`: Main hashing function with multiple processing stages.
 - `constant_time_compare(val1, val2)`: String comparison function safe from timing attacks.
 
-## 🔥 Example Output
+## Example Output
 ```bash
 Enter text to hash: hello
 PLIR-256 Hash: 289539e17503f92aec27f040a1ce4d3f5842eae45a6612b63a66435b49023a49
 ```
+## Benchmarks
+- ** Bit Distribution
+- ** NIST STS
+- ** Hash Time
+- ** Avalanche Effect & Collision Test
