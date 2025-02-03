@@ -23,5 +23,5 @@ Enter the text you want to hash, and the hash result will be displayed.
 ## 🔥 Example Output
 ```bash
 Enter text to hash: hello
-Hash Result: fec2cac1659415157aa915aaf7a83750e5a8baada05821ce80d3c615c125f36b0a06
+PLIR-256 Hash: 289539e17503f92aec27f040a1ce4d3f5842eae45a6612b63a66435b49023a49
 ```
