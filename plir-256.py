@@ -2,7 +2,7 @@
 #
 #
 # Written by Prima Agus Setiawan 
-# a.k.a joeheartless 
+# a.k.a joeheartless / joefryme@gmail.com
 
 import struct
 import hmac
@@ -42,19 +42,19 @@ def secure_plir_256(text, rounds=8, stages=1):
                 h[j] = modular_mix(h[j], key) ^ (message[j % message_length] + GOLDEN_RATIO_CONST) & 0xFFFFFFFF
                 h[j+1] = modular_mix(h[j+1], rotate_left(h[j], 13)) ^ (h[(j+3) % 8] >> 5) ^ (h[(j+6) % 8] << 3) ^ rotate_left(h[(j+7) % 8], 17)
         
-        return "".join(f"{x:08x}" for x in h[:8]), sum(h)  
+        return "".join(f"{x:08x}" for x in h[:8])
     
     hashed_output = text
     state = 0
     for _ in range(stages):
-        hashed_output, state = single_stage_hash(hashed_output, state)
-    
+        hashed_output = single_stage_hash(hashed_output, state)
+    hashed_output = hashed_output[:64]
     return hashed_output
-
+    
 def constant_time_compare(val1, val2):
     return hmac.compare_digest(val1, val2)
 
 if __name__ == "__main__":
     user_input = input("Masukkan teks untuk di-hash: ")
     hash_result = secure_plir_256(user_input)
-    print("Hasil Hash:", hash_result)
+    print("PLIR-256 Hash:", hash_result)
