@@ -2,7 +2,6 @@ from tqdm import tqdm
 import struct
 import random
 
-# Implementasi PLIR-256 Asli
 def rotate_left(x, n, bits=32):
     return ((x << n) & (2**bits - 1)) | (x >> (bits - n))
 
@@ -34,8 +33,7 @@ def secure_plir_256(text, rounds=8, stages=1):
             key = GOLDEN_RATIO_CONST ^ (i * 73) ^ (h[i % 8] << (i % 6)) ^ (h[(i+3) % 8] >> (i % 4)) ^ (h[(i+5) % 8] << (i % 8))
             
             for j in range(0, len(h), 2):
-                # Tambahan XOR dengan nilai dari iterasi sebelumnya
-                prev_xor = h[(j+1) % 8] ^ h[(j+3) % 8]  # Menggunakan dua elemen hash state sebelumnya
+                prev_xor = h[(j+1) % 8] ^ h[(j+3) % 8] 
                 h[j] = (modular_mix(h[j], key) ^ (message[j % message_length] + GOLDEN_RATIO_CONST) ^ prev_xor) & 0xFFFFFFFF
                 h[j+1] = (modular_mix(h[j+1], rotate_left(h[j], 13)) ^ (h[(j+3) % 8] >> 5) ^ (h[(j+6) % 8] << 3) ^ rotate_left(h[(j+7) % 8], 17) ^ prev_xor) & 0xFFFFFFFF
         
@@ -45,11 +43,10 @@ def secure_plir_256(text, rounds=8, stages=1):
     state = 0
     for _ in range(stages):
         hashed_output = single_stage_hash(hashed_output, state)
-        state ^= int(hashed_output[:8], 16)  # Update state dengan bagian awal hash
+        state ^= int(hashed_output[:8], 16)  
     hashed_output = hashed_output[:64]
     return hashed_output
 
-# Implementasi SHA-256 Python
 def rotate_right(value, shift, bits=32):
     return ((value >> shift) | (value << (bits - shift))) & 0xFFFFFFFF
 
@@ -62,7 +59,7 @@ def sha256_padding(message):
     message += original_length.to_bytes(8, "big")
     return message
 
-K = [  # Konstanta SHA-256 (64 Elemen)
+K = [  
     0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
     0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
     0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
@@ -113,7 +110,6 @@ def sha256_manual(message):
         h = sha256_process_chunk(message[i:i+64], h)
     return "".join(f"{x:08x}" for x in h)
 
-#  Benchmark Collision Test
 def collision_test(hash_function, label, num_tests=100000):
     seen_hashes = set()
     collisions = 0
@@ -129,7 +125,6 @@ def collision_test(hash_function, label, num_tests=100000):
 
     return collisions
 
-#  Benchmark Avalanche Effect Test
 def avalanche_test(hash_function, label, num_tests=1000):
     total_bit_changes = 0
     total_bits = len(hash_function("test")) * 4
