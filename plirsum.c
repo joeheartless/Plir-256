@@ -161,7 +161,7 @@ int hash_file_contents(const char *filename, char *out_hash) {
         fclose(fp);
         return 1;
     }
-    rewind(fp); 
+    rewind(fp);
 
     char *buffer = (char*)malloc((size_t)size + 1);
     if (!buffer) {
@@ -182,6 +182,29 @@ int hash_file_contents(const char *filename, char *out_hash) {
 }
 
 int main(int argc, char *argv[]) {
+    const char* VERSION = "6.9";
+
+    if (argc == 2) {
+        if ((strcmp(argv[1], "--help") == 0) || (strcmp(argv[1], "-h") == 0)) {
+            printf(
+                "PLIR-256 %s\n\n"
+                "Usage:\n"
+                "  %s [FILE]\n"
+                "      Computes a PLIR-256 hash of the provided FILE.\n"
+                "      If FILE is not specified, the program reads from standard input.\n\n"
+                "Options:\n"
+                "  -h, --help      Display this help message.\n"
+                "  -v, --version   Display the program version.\n\n",
+                VERSION, argv[0]
+            );
+            return 0;
+        }
+        else if ((strcmp(argv[1], "--version") == 0) || (strcmp(argv[1], "-v") == 0)) {
+            printf("PLIR-256 version %s\n", VERSION);
+            return 0;
+        }
+    }
+
     char hash_result[65];
     hash_result[64] = '\0';
 
@@ -193,10 +216,8 @@ int main(int argc, char *argv[]) {
     }
 
     char input_text[1024] = {0};
-
     size_t bytes_read = fread(input_text, 1, sizeof(input_text) - 1, stdin);
-    input_text[bytes_read] = '\0'; 
-
+    input_text[bytes_read] = '\0';
 
     size_t len = strlen(input_text);
     if (len > 0 && input_text[len - 1] == '\n') {
