@@ -174,7 +174,14 @@ int main(void) {
     }
     size_t len = strlen(input_text);
     if (len > 0 && input_text[len - 1] == '\n') {
-        input_text[len - 1] = '\0';
+        input_text[--len] = '\0';
+    }
+    if (len > 0 && input_text[len - 1] == '\r') {
+        input_text[--len] = '\0';
+    }
+
+    if (len > 0 && input_text[len - 1] == ' ') {
+        input_text[--len] = '\0';
     }
 
     char hash_result[65];
