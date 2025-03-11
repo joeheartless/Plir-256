@@ -73,14 +73,14 @@ uint32_t* expand_message_deterministic(const char *text, size_t *out_len) {
 
 void single_stage_hash(const char *input_text, uint32_t prev_state, int rounds, char *out_hex) {
     uint32_t h[8];
-    h[0] = 0x6a09e667 ^ prev_state;
-    h[1] = 0xbb67ae85 ^ prev_state;
-    h[2] = 0x3c6ef372 ^ prev_state;
-    h[3] = 0xa54ff53a ^ prev_state;
-    h[4] = 0x510e527f ^ prev_state;
-    h[5] = 0x9b05688c ^ prev_state;
-    h[6] = 0x1f83d9ab ^ prev_state;
-    h[7] = 0x5be0cd19 ^ prev_state;
+    h[0] = (0x86B47C4C ^ seed) ^ prev_state;
+    h[1] = (0xEEDFCBB3 ^ seed) ^ prev_state;  
+    h[2] = (0x1105DC08 ^ seed) ^ prev_state; 
+    h[3] = (0x21FB8A71 ^ seed) ^ prev_state; 
+    h[4] = (0x43B675C9 ^ seed) ^ prev_state;   
+    h[5] = (0x75B803D5 ^ seed) ^ prev_state;  
+    h[6] = (0x864FAAE8 ^ seed) ^ prev_state;  
+    h[7] = (0xD7C261FF ^ seed) ^ prev_state; 
 
     size_t message_length;
     uint32_t *message = expand_message_deterministic(input_text, &message_length);
@@ -179,7 +179,7 @@ char *PLIR256(UDF_INIT *initid, UDF_ARGS *args, char *result,
     static char hash_result[65];
     hash_result[64] = '\0';
 
-    secure_plir_256(args->args[0], 8, 1, hash_result);
+    secure_plir_256(args->args[0], 8, 2, hash_result);
 
     strcpy(result, hash_result);
     *length = (unsigned long)strlen(hash_result);
