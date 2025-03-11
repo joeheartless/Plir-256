@@ -63,6 +63,8 @@ uint32_t* expand_message_deterministic(const char *text, size_t *out_len) {
 }
 
 void single_stage_hash(const char *input_text, uint32_t prev_state, int rounds, char *out_hex) {
+    uint32_t seed = sum_ascii(input_text) * 137;
+    
     uint32_t h[8];
     h[0] = (0x86B47C4C ^ seed) ^ prev_state;
     h[1] = (0xEEDFCBB3 ^ seed) ^ prev_state;  
@@ -175,7 +177,7 @@ int hash_file_contents(const char *filename, char *out_hash) {
 
     buffer[read_bytes] = '\0';
 
-    secure_plir_256(buffer, 8, 1, out_hash);
+    secure_plir_256(buffer, 8, 2, out_hash);
 
     free(buffer);
     return 0;
@@ -221,7 +223,14 @@ int main(int argc, char *argv[]) {
 
     size_t len = strlen(input_text);
     if (len > 0 && input_text[len - 1] == '\n') {
-        input_text[len - 1] = '\0';
+        input_text[--len] = '\0';
+    }
+    if (len > 0 && input_text[len - 1] == '\r') {
+        input_text[--len] = '\0';
+    }
+
+    if (len > 0 && input_text[len - 1] == ' ') {
+        input_text[--len] = '\0';
     }
 
     secure_plir_256(input_text, 8, 2, hash_result);
