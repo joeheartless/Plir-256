@@ -41,7 +41,7 @@ This repository contains a C implementation of a custom hashing algorithm called
 Use your preferred C compiler to compile the program. For instance:
 
 ```bash
-gcc -o plir256 plir256.c
+gcc -o plir-256 plir-256.c
 
 
 ## Example Output
