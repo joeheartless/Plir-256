@@ -42,8 +42,10 @@ Use your preferred C compiler to compile the program. For instance:
 
 ```bash
 gcc -o plir-256 plir-256.c
-
-
+```
+```bash
+./plir-256
+```
 ## Example Output
 ```bash
 Enter text to hash: Password
