@@ -72,6 +72,8 @@ uint32_t* expand_message_deterministic(const char *text, size_t *out_len) {
 }
 
 void single_stage_hash(const char *input_text, uint32_t prev_state, int rounds, char *out_hex) {
+    uint32_t seed = sum_ascii(input_text) * 137;
+    
     uint32_t h[8];
     h[0] = (0x86B47C4C ^ seed) ^ prev_state;
     h[1] = (0xEEDFCBB3 ^ seed) ^ prev_state;  
