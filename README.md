@@ -51,8 +51,6 @@ gcc -o plir-256 plir-256.c
 Enter text to hash: Password
 PLIR-256 Hash: 7a368ff539c86b89f6819bdc881dcc796e5848c0b18860f206d7f35e37a38afb
 ```
-## Benchmarks
-- **Bit Distribution**
-- **NIST STS**
-- **Hash Time**
-- **Avalanche Effect & Collision Test**
+## Includes
+- **plirsum.c**
+- **plir-256-udf.c**
