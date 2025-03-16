@@ -2,6 +2,10 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
+#include <time.h>
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
 static inline uint32_t rotate_left(uint32_t x, int n) {
     return (x << n) | (x >> (32 - n));
@@ -23,6 +27,20 @@ static int sum_ascii(const char *text) {
         text++;
     }
     return total;
+}
+
+uint64_t get_nanotime() {
+    #ifdef _WIN32
+        LARGE_INTEGER freq, counter;
+        QueryPerformanceFrequency(&freq);
+        QueryPerformanceCounter(&counter);
+        uint64_t nanosec = (counter.QuadPart * 1000000000ULL) / freq.QuadPart;
+        return nanosec ^ ((uint64_t)GetTickCount() * 157U);
+    #else
+        struct timespec ts;
+        clock_gettime(CLOCK_REALTIME, &ts);
+        return (uint64_t)ts.tv_sec * 1000000000ULL + (uint64_t)ts.tv_nsec;
+    #endif
 }
 
 uint32_t* expand_message_deterministic(const char *text, size_t *out_len) {
@@ -183,8 +201,55 @@ int hash_file_contents(const char *filename, char *out_hash) {
     return 0;
 }
 
+void generate_random_hex(int N) {
+    const uint32_t GOLDEN_RATIO_CONST = 0x9E3779B9;
+    uint64_t nanosec = get_nanotime();
+    
+    char seed_input[64];
+    snprintf(seed_input, sizeof(seed_input), "%08x%016llx", GOLDEN_RATIO_CONST, nanosec);
+    
+    char hash_output[65];
+    secure_plir_256(seed_input, 8, 2, hash_output);
+    
+    for (int i = 0; i < N && i < 64; i++) {
+        putchar(hash_output[i]);
+    }
+    putchar('\n');
+}
+
+void print_last_n_digits_of_nanotime(int N) {
+    uint64_t nanosec = get_nanotime();
+    char buffer[32];
+    snprintf(buffer, sizeof(buffer), "%llu", nanosec);
+    
+    int len = strlen(buffer);
+    if (N > len) N = len;  // Hindari out-of-bounds
+    
+    printf("%.*s\n", N, buffer + (len - N));
+}
+
 int main(int argc, char *argv[]) {
     const char* VERSION = "6.9";
+
+    if (argc == 3 && strcmp(argv[1], "--rand") == 0) {
+        int N = atoi(argv[2]);
+        if (N <= 0 || N > 64) {
+            fprintf(stderr, "Invalid N value, must be between 1 and 64.\n");
+            return 1;
+        }
+        generate_random_hex(N);
+        return 0;
+    }
+
+    if (argc == 3 && strcmp(argv[1], "--randit") == 0) {
+        int N = atoi(argv[2]);
+        if (N <= 0) {
+            fprintf(stderr, "Invalid N value, must be greater than 0.\n");
+            return 1;
+        }
+        print_last_n_digits_of_nanotime(N);
+        return 0;
+    }
 
     if (argc == 2) {
         if ((strcmp(argv[1], "--help") == 0) || (strcmp(argv[1], "-h") == 0)) {
@@ -196,7 +261,12 @@ int main(int argc, char *argv[]) {
                 "      If FILE is not specified, the program reads from standard input.\n\n"
                 "Options:\n"
                 "  -h, --help      Display this help message.\n"
-                "  -v, --version   Display the program version.\n\n",
+                "  -v, --version   Display the program version.\n"
+                "  --rand N        Generate N random hexadecimal characters (1-64).\n"
+                "                  Uses hashing of Golden Ratio + Epochtime Nanosecond.\n"
+                "                  Example: plirsum.exe --rand 16\n"
+                "  --randit N      Generate dynamic iteration count for hashing.\n"
+                "                  Example: plirsum.exe --randit 8\n\n",
                 VERSION, argv[0]
             );
             return 0;
